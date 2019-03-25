@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.TitlePaneLayout;
 
 import dominio.Calculadora;
+import excepciones.DivisionPorCeroException;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -49,7 +50,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private JPanel contentPane;
 	private JTextField textResultado;
-	Calculadora calculadora = new Calculadora();
+	private static Calculadora calculadora;
 	/**
 	 * Launch the application.
 	 */
@@ -58,14 +59,18 @@ public class MenuPpal extends JFrame implements KeyListener {
 			public void run() {
 				try {
 					MenuPpal frame = new MenuPpal();
-					
 					frame.setVisible(true);
+					calculadora = new Calculadora();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
+	
+	// Para que no tenga aspecto ochentero Uiumanager.SetLookAndFeel
+	// Crear clase propia para los botones que herede de JButton
+	// modificar a nuestro antojo bordes, color por defecto etc y crear los botones con esa clase propia
 
 	/**
 	 * Create the frame.
@@ -76,7 +81,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		///////////
 		setTitle("Calculadora 2.0");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(2000, 1000, 320, 425);
+		setBounds(1500, 500, 320, 425);
 		
 		
 		
@@ -167,6 +172,12 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.setLayout(gbl_panel_Centro_Centro);
 		
 		JButton button_MemoryClear = new JButton("MC");
+		button_MemoryClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				calculadora.setNumMemoria("");
+				
+			}
+		});
 		GridBagConstraints gbc_button_MemoryClear = new GridBagConstraints();
 		gbc_button_MemoryClear.fill = GridBagConstraints.BOTH;
 		gbc_button_MemoryClear.insets = new Insets(0, 6, 5, 5);
@@ -175,6 +186,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_MemoryClear, gbc_button_MemoryClear);
 		
 		JButton button_MemoryRecall = new JButton("MR");
+		button_MemoryRecall.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textResultado.setText(calculadora.getNumMemoria());
+			}
+		});
 		GridBagConstraints gbc_button_MemoryRecall = new GridBagConstraints();
 		gbc_button_MemoryRecall.fill = GridBagConstraints.BOTH;
 		gbc_button_MemoryRecall.insets = new Insets(0, 0, 5, 5);
@@ -183,6 +199,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_MemoryRecall, gbc_button_MemoryRecall);
 		
 		JButton button_MemoryStorage = new JButton("MS");
+		button_MemoryStorage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				calculadora.setNumMemoria(textResultado.getText());
+			}
+		});
 		GridBagConstraints gbc_button_MemoryStorage = new GridBagConstraints();
 		gbc_button_MemoryStorage.fill = GridBagConstraints.BOTH;
 		gbc_button_MemoryStorage.insets = new Insets(0, 0, 5, 5);
@@ -191,6 +212,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_MemoryStorage, gbc_button_MemoryStorage);
 		
 		JButton button_MemorySumar = new JButton("M+");
+		button_MemorySumar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				double resultMemoria = Double.parseDouble(calculadora.getNumMemoria());
+			}
+		});
 		GridBagConstraints gbc_button_MemorySumar = new GridBagConstraints();
 		gbc_button_MemorySumar.fill = GridBagConstraints.BOTH;
 		gbc_button_MemorySumar.insets = new Insets(0, 0, 5, 5);
@@ -296,6 +322,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Num9, gbc_button_Num9);
 		
 		JButton button_Dividir = new JButton("/");
+		button_Dividir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				asignarOperacion("/");
+			}
+		});
 		GridBagConstraints gbc_button_Dividir = new GridBagConstraints();
 		gbc_button_Dividir.fill = GridBagConstraints.BOTH;
 		gbc_button_Dividir.insets = new Insets(0, 0, 5, 5);
@@ -462,11 +493,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		gl_panel_Bot.setHorizontalGroup(
 			gl_panel_Bot.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_Bot.createSequentialGroup()
-					.addGap(47)
+					.addGap(35)
 					.addComponent(labelInformación1)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(labelInformacion2)
-					.addGap(54))
+					.addGap(31))
 		);
 		gl_panel_Bot.setVerticalGroup(
 			gl_panel_Bot.createParallelGroup(Alignment.LEADING)
@@ -486,6 +517,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		int key = e.getKeyCode();
 		
 		switch (key) {
+		
 		case KeyEvent.VK_0: insertarNumero("0"); break;
 		case KeyEvent.VK_1: insertarNumero("1"); break;
 		case KeyEvent.VK_2: insertarNumero("2"); break;
@@ -513,39 +545,51 @@ public class MenuPpal extends JFrame implements KeyListener {
 		
 	}
 	
-	private void insertarNumero(String numero){
+	private void insertarNumero(String numero) {
 		this.textResultado.setText(calculadora.concatenar(numero));
+		textResultado.requestFocus();
 	}
-	private void asignarOperacion(String operacion){
+	private void asignarOperacion(String operacion) {
+		switch (operacion) {
+		case "/": calculadora.setOperacion("/"); break;
+		case "+": calculadora.setOperacion("+"); break;
+		case "-": calculadora.setOperacion("-"); break;
+		case "*": calculadora.setOperacion("*"); break;
+		}
+		calculadora.setNumero2(Double.parseDouble(calculadora.getNumActual()));
+		calculadora.setNumActual("0");
+		textResultado.requestFocus();
+	}
+	private void calcular() throws DivisionPorCeroException {
+		refrescarTextoResultado();
+		textResultado.requestFocus();
+	}
+	private void raiz() {
 		
 	}
-	private void calcular(){
+	private void inversa() {
 		
 	}
-	private void raiz(){
+	private void cambiarSigno() {
 		
 	}
-	private void inversa(){
-		
-	}
-	private void cambiarSigno(){
-		
-	}
-	private void retroceder(){
+	private void retroceder() {
 		String restante = this.textResultado.getText();
 		if (this.textResultado.getText().length() > 0) {
 			calculadora.retroceder();
-			this.textResultado.setText(calculadora.getNumActual());
+			refrescarTextoResultado();
 		}
+		textResultado.requestFocus();
 	}
-	private void clearError(){
+	private void clearError() {
 		
 	}
-	private void clear(){
-		calculadora.setNumActual("");
+	private void clear() {
+		calculadora.setNumActual("0");
+		refrescarTextoResultado();
+		textResultado.requestFocus();
+	}
+	private void refrescarTextoResultado() {
 		this.textResultado.setText(calculadora.getNumActual());
-	}
-	private void refrescarTextoResultado(){
-		
 	}
 }

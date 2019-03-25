@@ -15,8 +15,8 @@ public class Calculadora {
 
 	// CONSTRUCTOR
 	public Calculadora() {
-
-
+		this.numero1 = this.numero2 = 0;
+		this.operacion = this.numActual = this.numMemoria = "";
 	}
 
 
@@ -56,15 +56,17 @@ public class Calculadora {
 	// METODOS
 	// Operaciones aritméticas
 	public double sumar() {
-
+		double suma = this.numero1 + this.numero2;
+		this.numero1 = suma;
+		return suma;
 	}
 
 	public double restar() {
-
+		return 0;
 	}
 
 	public double multiplicar() {
-
+		return 0;
 	}
 
 	public double dividir() throws DivisionPorCeroException {
@@ -82,11 +84,11 @@ public class Calculadora {
 	}
 
 	public double raiz() {
-
+		return 0;
 	}
 
 	public double inversa() throws DivisionPorCeroException {
-
+		return 0;
 	}
 
 	// Cambiar signo al valor actual
@@ -101,18 +103,21 @@ public class Calculadora {
 
 	// Concatenar número al numActual
 	public String concatenar(String numero) {
-		if (this.numActual == null) {
+		if (this.numActual == "" || this.numActual.equals("0")) {
 			this.numActual = numero;
 		} else {
 			this.numActual+=numero;
 		}
 		return this.numActual;
 	}
-	
+
 	// ¿BackSpace?
 	public void retroceder() {
 		if (this.numActual.length() > 0) {
 			this.numActual = this.numActual.substring(0, this.numActual.length() - 1);
+		}
+		if (this.numActual.equals("")) {
+			this.numActual = "0";
 		}
 	}
 
@@ -126,20 +131,22 @@ public class Calculadora {
 	}
 
 	// Calcular cualquier operación
-	public double calcular() throws DivisionPorCeroExcepcion {
+	public double calcular() throws DivisionPorCeroException {
 
 		double res = 0;
-		switch (operacion){
+		switch (this.operacion){
 		case "+": res = sumar(); break;
 		case "-": res = restar(); break;
 		case "*": res = multiplicar(); break;
 		case "/": res = dividir(); break;
 		case "+%": porcentaje(); res = sumar(); break;
 		case "-%": porcentaje(); res = restar(); break;
-		case "*%": porcentaje(); res = num2; break;
+		case "*%": porcentaje(); res = numero2; break;
 		case "/%": porcentaje(); res = dividir(); break;
 		}
+		this.numActual = Double.toString(res);
 		return res;
+
 	}
 
 
