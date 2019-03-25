@@ -8,6 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.TitlePaneLayout;
+
+import dominio.Calculadora;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -46,6 +49,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private JPanel contentPane;
 	private JTextField textResultado;
+	Calculadora calculadora = new Calculadora();
 	/**
 	 * Launch the application.
 	 */
@@ -54,6 +58,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 			public void run() {
 				try {
 					MenuPpal frame = new MenuPpal();
+					
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -67,13 +72,12 @@ public class MenuPpal extends JFrame implements KeyListener {
 	 */
 	public MenuPpal() {
 		////////////
-		
 		setResizable(false);
 		///////////
 		setTitle("Calculadora 2.0");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		setBounds(2000, 1000, 320, 425);
+		
 		
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -203,6 +207,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_MemoryRestar, gbc_button_MemoryRestar);
 		
 		JButton button_Retroceder = new JButton("←");
+		button_Retroceder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				retroceder();
+			}
+		});
 		GridBagConstraints gbc_button_Retroceder = new GridBagConstraints();
 		gbc_button_Retroceder.fill = GridBagConstraints.BOTH;
 		gbc_button_Retroceder.insets = new Insets(0, 6, 5, 5);
@@ -219,6 +228,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_ClearError, gbc_button_ClearError);
 		
 		JButton button_Clear = new JButton("C");
+		button_Clear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clear();
+			}
+		});
 		GridBagConstraints gbc_button_Clear = new GridBagConstraints();
 		gbc_button_Clear.fill = GridBagConstraints.BOTH;
 		gbc_button_Clear.insets = new Insets(0, 0, 5, 5);
@@ -243,6 +257,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_RaizCuadrada, gbc_button_RaizCuadrada);
 		
 		JButton button_Num7 = new JButton("7");
+		button_Num7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("7");
+			}
+		});
 		GridBagConstraints gbc_button_Num7 = new GridBagConstraints();
 		gbc_button_Num7.fill = GridBagConstraints.BOTH;
 		gbc_button_Num7.insets = new Insets(0, 6, 5, 5);
@@ -251,6 +270,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Num7, gbc_button_Num7);
 		
 		JButton button_Num8 = new JButton("8");
+		button_Num8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("8");
+			}
+		});
 		GridBagConstraints gbc_button_Num8 = new GridBagConstraints();
 		gbc_button_Num8.fill = GridBagConstraints.BOTH;
 		gbc_button_Num8.insets = new Insets(0, 0, 5, 5);
@@ -259,6 +283,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Num8, gbc_button_Num8);
 		
 		JButton button_Num9 = new JButton("9");
+		button_Num9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("9");
+			}
+		});
 		GridBagConstraints gbc_button_Num9 = new GridBagConstraints();
 		gbc_button_Num9.fill = GridBagConstraints.BOTH;
 		gbc_button_Num9.insets = new Insets(0, 0, 5, 5);
@@ -283,6 +312,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Porcentaje, gbc_button_Porcentaje);
 		
 		JButton button_Num4 = new JButton("4");
+		button_Num4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("4");
+			}
+		});
 		GridBagConstraints gbc_button_Num4 = new GridBagConstraints();
 		gbc_button_Num4.fill = GridBagConstraints.BOTH;
 		gbc_button_Num4.insets = new Insets(0, 6, 5, 5);
@@ -291,6 +325,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Num4, gbc_button_Num4);
 		
 		JButton button_Num5 = new JButton("5");
+		button_Num5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("5");
+			}
+		});
 		GridBagConstraints gbc_button_Num5 = new GridBagConstraints();
 		gbc_button_Num5.fill = GridBagConstraints.BOTH;
 		gbc_button_Num5.insets = new Insets(0, 0, 5, 5);
@@ -299,6 +338,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Num5, gbc_button_Num5);
 		
 		JButton button_Num6 = new JButton("6");
+		button_Num6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("6");
+			}
+		});
 		GridBagConstraints gbc_button_Num6 = new GridBagConstraints();
 		gbc_button_Num6.fill = GridBagConstraints.BOTH;
 		gbc_button_Num6.insets = new Insets(0, 0, 5, 5);
@@ -323,6 +367,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_DividirPorX, gbc_button_DividirPorX);
 		
 		JButton button_Num1 = new JButton("1");
+		button_Num1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("1");
+			}
+		});
 		GridBagConstraints gbc_button_Num1 = new GridBagConstraints();
 		gbc_button_Num1.fill = GridBagConstraints.BOTH;
 		gbc_button_Num1.insets = new Insets(0, 6, 5, 5);
@@ -331,6 +380,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Num1, gbc_button_Num1);
 		
 		JButton button_Num2 = new JButton("2");
+		button_Num2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("2");
+			}
+		});
 		GridBagConstraints gbc_button_Num2 = new GridBagConstraints();
 		gbc_button_Num2.fill = GridBagConstraints.BOTH;
 		gbc_button_Num2.insets = new Insets(0, 0, 5, 5);
@@ -339,6 +393,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Num2, gbc_button_Num2);
 		
 		JButton button_Num3 = new JButton("3");
+		button_Num3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("3");
+			}
+		});
 		GridBagConstraints gbc_button_Num3 = new GridBagConstraints();
 		gbc_button_Num3.fill = GridBagConstraints.BOTH;
 		gbc_button_Num3.insets = new Insets(0, 0, 5, 5);
@@ -364,6 +423,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Resultado, gbc_button_Resultado);
 		
 		JButton button_Num0 = new JButton("0");
+		button_Num0.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertarNumero("0");
+			}
+		});
 		GridBagConstraints gbc_button_Num0 = new GridBagConstraints();
 		gbc_button_Num0.fill = GridBagConstraints.BOTH;
 		gbc_button_Num0.gridwidth = 2;
@@ -450,7 +514,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 	}
 	
 	private void insertarNumero(String numero){
-		
+		this.textResultado.setText(calculadora.concatenar(numero));
 	}
 	private void asignarOperacion(String operacion){
 		
@@ -468,13 +532,18 @@ public class MenuPpal extends JFrame implements KeyListener {
 		
 	}
 	private void retroceder(){
-		
+		String restante = this.textResultado.getText();
+		if (this.textResultado.getText().length() > 0) {
+			calculadora.retroceder();
+			this.textResultado.setText(calculadora.getNumActual());
+		}
 	}
 	private void clearError(){
 		
 	}
 	private void clear(){
-		
+		calculadora.setNumActual("");
+		this.textResultado.setText(calculadora.getNumActual());
 	}
 	private void refrescarTextoResultado(){
 		

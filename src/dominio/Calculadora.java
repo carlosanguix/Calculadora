@@ -1,5 +1,7 @@
 package dominio;
 
+import excepciones.DivisionPorCeroException;
+
 public class Calculadora {
 
 	// ATRIBUTOS
@@ -66,7 +68,13 @@ public class Calculadora {
 	}
 
 	public double dividir() throws DivisionPorCeroException {
-
+		double resultado = 0;
+		if (this.getNumero2() == 0) {
+			throw new DivisionPorCeroException();
+		} else {
+			resultado =  this.numero1 / this.numero2;
+		}
+		return resultado;
 	}
 
 	public void porcentaje() {
@@ -93,12 +101,19 @@ public class Calculadora {
 
 	// Concatenar número al numActual
 	public String concatenar(String numero) {
-
+		if (this.numActual == null) {
+			this.numActual = numero;
+		} else {
+			this.numActual+=numero;
+		}
+		return this.numActual;
 	}
 	
 	// ¿BackSpace?
 	public void retroceder() {
-
+		if (this.numActual.length() > 0) {
+			this.numActual = this.numActual.substring(0, this.numActual.length() - 1);
+		}
 	}
 
 	public void sumarMemoria() {
