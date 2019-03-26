@@ -321,10 +321,15 @@ public class MenuPpal extends JFrame implements KeyListener {
 		gbc_button_Num9.gridy = 2;
 		panel_Centro_Centro.add(button_Num9, gbc_button_Num9);
 		
+		// TODO
 		JButton button_Dividir = new JButton("/");
 		button_Dividir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				asignarOperacion("/");
+				try {
+					asignarOperacion("/");
+				} catch (DivisionPorCeroException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		GridBagConstraints gbc_button_Dividir = new GridBagConstraints();
@@ -467,7 +472,16 @@ public class MenuPpal extends JFrame implements KeyListener {
 		gbc_button_Num0.gridy = 5;
 		panel_Centro_Centro.add(button_Num0, gbc_button_Num0);
 		
+		//TODO
 		JButton button_Coma = new JButton(",");
+		button_Coma.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!calculadora.getNumActual().contains(".")) {
+					calculadora.setNumActual(calculadora.getNumActual() + ".");
+				}
+				refrescarTextoResultado();
+			}
+		});
 		GridBagConstraints gbc_button_Coma = new GridBagConstraints();
 		gbc_button_Coma.fill = GridBagConstraints.BOTH;
 		gbc_button_Coma.insets = new Insets(0, 0, 5, 5);
@@ -529,6 +543,17 @@ public class MenuPpal extends JFrame implements KeyListener {
 		case KeyEvent.VK_8: insertarNumero("8"); break;
 		case KeyEvent.VK_9: insertarNumero("9"); break;
 		
+		case KeyEvent.VK_NUMPAD0: insertarNumero("0"); break;
+		case KeyEvent.VK_NUMPAD1: insertarNumero("1"); break;
+		case KeyEvent.VK_NUMPAD2: insertarNumero("2"); break;
+		case KeyEvent.VK_NUMPAD3: insertarNumero("3"); break;
+		case KeyEvent.VK_NUMPAD4: insertarNumero("4"); break;
+		case KeyEvent.VK_NUMPAD5: insertarNumero("5"); break;
+		case KeyEvent.VK_NUMPAD6: insertarNumero("6"); break;
+		case KeyEvent.VK_NUMPAD7: insertarNumero("7"); break;
+		case KeyEvent.VK_NUMPAD8: insertarNumero("8"); break;
+		case KeyEvent.VK_NUMPAD9: insertarNumero("9"); break;
+		
 		default:
 			break;
 		}
@@ -549,19 +574,29 @@ public class MenuPpal extends JFrame implements KeyListener {
 		this.textResultado.setText(calculadora.concatenar(numero));
 		textResultado.requestFocus();
 	}
-	private void asignarOperacion(String operacion) {
+	private void asignarOperacion(String operacion) throws DivisionPorCeroException {
 		switch (operacion) {
 		case "/": calculadora.setOperacion("/"); break;
 		case "+": calculadora.setOperacion("+"); break;
 		case "-": calculadora.setOperacion("-"); break;
 		case "*": calculadora.setOperacion("*"); break;
 		}
-		calculadora.setNumero2(Double.parseDouble(calculadora.getNumActual()));
+		//TODO
+		if (calculadora.getNumero1() == -999999999) {
+			calculadora.setNumero1(Double.parseDouble(calculadora.getNumActual()));
+		} else {
+			//TODO
+			calculadora.setNumero1(calculadora.getNumero2());
+			calculadora.setNumero2(Double.parseDouble(calculadora.getNumActual()));
+			this.calcular();
+		}
 		calculadora.setNumActual("0");
 		textResultado.requestFocus();
 	}
 	private void calcular() throws DivisionPorCeroException {
+		//TODO
 		refrescarTextoResultado();
+		this.textResultado.setText(Double.toString(calculadora.calcular()));
 		textResultado.requestFocus();
 	}
 	private void raiz() {
@@ -586,10 +621,17 @@ public class MenuPpal extends JFrame implements KeyListener {
 	}
 	private void clear() {
 		calculadora.setNumActual("0");
+		// TODO
+		calculadora.setNumero1(-999999999);
+		calculadora.setNumero2(0);
 		refrescarTextoResultado();
 		textResultado.requestFocus();
 	}
 	private void refrescarTextoResultado() {
+		if (calculadora.getNumActual().contains(".")) {
+			//TODO
+			this.textResultado.setText(calculadora.getNumActual().replace('.', ','));
+		}
 		this.textResultado.setText(calculadora.getNumActual());
 	}
 }
