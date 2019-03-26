@@ -15,7 +15,7 @@ public class Calculadora {
 
 	// CONSTRUCTOR
 	public Calculadora() {
-		this.numero1 = -999999999;
+		this.numero1 = 0;
 		this.numero2 = 0;
 		this.operacion = this.numActual = this.numMemoria = "";
 	}
