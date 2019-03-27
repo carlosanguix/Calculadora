@@ -57,17 +57,15 @@ public class Calculadora {
 	// METODOS
 	// Operaciones aritméticas
 	public double sumar() {
-		double suma = this.numero1 + this.numero2;
-		this.numero1 = suma;
-		return suma;
+		return this.numero1 + this.numero2;
 	}
 
 	public double restar() {
-		return 0;
+		return this.numero1 - this.numero2;
 	}
 
 	public double multiplicar() {
-		return 0;
+		return this.numero1 * this.numero2;
 	}
 
 	public double dividir() throws DivisionPorCeroException {
@@ -99,17 +97,29 @@ public class Calculadora {
 
 	// Resetear todas las variables
 	public void reset() {
-
+		this.numero1 = 0;
+		this.numero2 = 0;
+		this.operacion = this.numActual = this.numMemoria = "";
 	}
 
 	// Concatenar número al numActual
 	public String concatenar(String numero) {
-		if (this.numActual == "" || this.numActual.equals("0")) {
-			this.numActual = numero;
+
+		if (this.numActual.equals("") || this.numActual.equals("0")) {
+			if (numero.equals(".")) {
+				this.numActual = "0.";
+			} else {
+				this.numActual = numero;
+			}
 		} else {
-			this.numActual+=numero;
+			if (numero.equals(".") && !this.numActual.contains(".")) {
+				this.numActual += numero;
+			} else if (!numero.equals(".")) {
+				this.numActual += numero;
+			}
 		}
 		return this.numActual;
+
 	}
 
 	// ¿BackSpace?

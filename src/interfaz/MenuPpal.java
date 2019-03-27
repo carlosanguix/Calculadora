@@ -469,10 +469,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		JButton button_Coma = new JButton(",");
 		button_Coma.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (!calculadora.getNumActual().contains(",")) {
-					calculadora.setNumActual(calculadora.getNumActual() + ".");
-				}
-				refrescarTextoResultado();
+				insertarNumero(".");
 			}
 		});
 		GridBagConstraints gbc_button_Coma = new GridBagConstraints();
@@ -554,44 +551,37 @@ public class MenuPpal extends JFrame implements KeyListener {
 	}
 
 	private void insertarNumero(String numero) {
-		this.textResultado.setText(calculadora.concatenar(numero));
+		calculadora.concatenar(numero);
+		refrescarTextoResultado();
 		textResultado.requestFocus();
 	}
 
 	private void asignarOperacion(String operacion) throws DivisionPorCeroException {
-		calculadora.setOperacion(operacion);
-		String numero = "";
 		
-		for (int i = 0; i < calculadora.getNumActual().length(); i++) {
-			if (calculadora.getNumActual().charAt(i) == ',') {
-				numero = numero + '.';
-			} else {
-				numero = numero + calculadora.getNumActual().charAt(i);
-			}
-		}
+		String numero = calculadora.getNumActual();
 		
 		if (calculadora.getNumero1() == 0) {
 			calculadora.setNumero1(Double.parseDouble(numero));
 		} else {
-			//TODO 2 + 3 [+]
 			calculadora.setNumero2(Double.parseDouble(numero));
-			calcular();
-			calculadora.setNumero1(Double.parseDouble(calculadora.getNumActual()));
-			
-			calculadora.setNumero2(0);
 		}
 		
+		if (!calculadora.getOperacion().isEmpty()) {
+			calcular();
+		}
+		
+		calculadora.setOperacion(operacion);
 		calculadora.setNumActual("0");
 		textResultado.requestFocus();
 	}
 
 	private void calcular() throws DivisionPorCeroException {
-		refrescarTextoResultado();
+		
 		double resultado = calculadora.calcular();
-		calculadora.setNumActual(Double.toHexString(resultado));
-		refrescarTextoResultado();
 		textResultado.requestFocus();
-		calculadora.setOperacion("");
+		calculadora.setNumActual(Double.toString(resultado));
+		refrescarTextoResultado();
+
 	}
 
 	private void raiz() {
@@ -608,9 +598,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void retroceder() {
 		String restante = this.textResultado.getText();
-		if (this.textResultado.getText().length() > 0) {
-			calculadora.retroceder();
-			refrescarTextoResultado();
+		if (!calculadora.getNumActual().equals("0")) {
+			if (this.textResultado.getText().length() > 0) {
+				calculadora.retroceder();
+				refrescarTextoResultado();
+			}
 		}
 		textResultado.requestFocus();
 	}
@@ -629,12 +621,15 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void refrescarTextoResultado() {
 		
+		String numero = "";
 		for (int i = 0; i < calculadora.getNumActual().length(); i++) {
 			if (calculadora.getNumActual().charAt(i) == '.') {
-				calculadora.setNumActual(calculadora.getNumActual().substring(0, i) + ",");
+				numero = numero + ",";
+			} else {
+				numero = numero + calculadora.getNumActual().charAt(i);
 			}
 		}
 		
-		this.textResultado.setText(calculadora.getNumActual());
+		textResultado.setText(numero);
 	}
 }
