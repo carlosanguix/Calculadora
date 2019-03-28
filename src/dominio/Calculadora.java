@@ -149,7 +149,9 @@ public class Calculadora {
 		case "+": res = sumar(); break;
 		case "-": res = restar(); break;
 		case "*": res = multiplicar(); break;
-		case "/": res = dividir(); break;
+		case "/":
+				res = dividir();
+			break;
 		case "+%": porcentaje(); res = sumar(); break;
 		case "-%": porcentaje(); res = restar(); break;
 		case "*%": porcentaje(); res = numero2; break;
