@@ -380,6 +380,15 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Num6, gbc_button_Num6);
 
 		JButton button_Multiplicar = new JButton("*");
+		button_Multiplicar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					try {
+						asignarOperacion("*");
+					} catch (DivisionPorCeroException e1) {
+						e1.printStackTrace();
+					}
+			}
+		});
 		GridBagConstraints gbc_button_Multiplicar = new GridBagConstraints();
 		gbc_button_Multiplicar.fill = GridBagConstraints.BOTH;
 		gbc_button_Multiplicar.insets = new Insets(0, 0, 5, 5);
@@ -435,6 +444,15 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Num3, gbc_button_Num3);
 
 		JButton button_Restar = new JButton("-");
+		button_Restar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					try {
+						asignarOperacion("-");
+					} catch (DivisionPorCeroException e1) {
+						e1.printStackTrace();
+					}
+			}
+		});
 		GridBagConstraints gbc_button_Restar = new GridBagConstraints();
 		gbc_button_Restar.fill = GridBagConstraints.BOTH;
 		gbc_button_Restar.insets = new Insets(0, 0, 5, 5);
@@ -480,6 +498,15 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Coma, gbc_button_Coma);
 
 		JButton button_Sumar = new JButton("+");
+		button_Sumar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					try {
+						asignarOperacion("+");
+					} catch (DivisionPorCeroException e1) {
+						e1.printStackTrace();
+					}
+			}
+		});
 		GridBagConstraints gbc_button_Sumar = new GridBagConstraints();
 		gbc_button_Sumar.fill = GridBagConstraints.BOTH;
 		gbc_button_Sumar.insets = new Insets(0, 0, 5, 5);
@@ -533,6 +560,19 @@ public class MenuPpal extends JFrame implements KeyListener {
 		case KeyEvent.VK_NUMPAD7: insertarNumero("7"); break;
 		case KeyEvent.VK_NUMPAD8: insertarNumero("8"); break;
 		case KeyEvent.VK_NUMPAD9: insertarNumero("9"); break;
+		
+		case KeyEvent.VK_BACK_SPACE: retroceder(); break;
+		case KeyEvent.VK_ESCAPE: clear(); break;
+		
+		case KeyEvent.VK_DECIMAL: insertarNumero("."); break;
+		case KeyEvent.VK_COMMA: insertarNumero("."); break;
+		case KeyEvent.VK_PERIOD: insertarNumero("."); break;
+		
+//		case KeyEvent.VK_ADD: asignarOperacion("+"); break;
+//		case KeyEvent.VK_MINUS: asignarOperacion("-"); break;
+//		case KeyEvent.VK_MULTIPLY: asignarOperacion("*"); break;
+//		case KeyEvent.VK_DIVIDE: asignarOperacion("/"); break;
+		
 
 		default:
 			break;
@@ -558,6 +598,8 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void asignarOperacion(String operacion) throws DivisionPorCeroException {
 		
+		
+		
 		String numero = calculadora.getNumActual();
 		
 		if (calculadora.getNumero1() == 0) {
@@ -578,10 +620,14 @@ public class MenuPpal extends JFrame implements KeyListener {
 	private void calcular() throws DivisionPorCeroException {
 		
 		double resultado = calculadora.calcular();
-		textResultado.requestFocus();
 		calculadora.setNumActual(Double.toString(resultado));
+		if (calculadora.getNumActual().contains(".")) {
+			arreglarNumero();
+		}
+		calculadora.setNumero1(resultado);
+		calculadora.setNumero2(0);
 		refrescarTextoResultado();
-
+		textResultado.requestFocus();
 	}
 
 	private void raiz() {
@@ -612,13 +658,25 @@ public class MenuPpal extends JFrame implements KeyListener {
 	}
 
 	private void clear() {
-		calculadora.setNumActual("0");
-		calculadora.setNumero1(0);
-		calculadora.setNumero2(0);
+		calculadora.reset();
 		refrescarTextoResultado();
 		textResultado.requestFocus();
 	}
 
+	private void arreglarNumero() {
+		String numeroArreglado = calculadora.getNumActual();
+		for (int i = calculadora.getNumActual().length() - 1; i > 0; i--) {
+			// 1.0 -> 1. -> 1
+			if (calculadora.getNumActual().charAt(i) == '0' || calculadora.getNumActual().charAt(i) == '.') {
+				numeroArreglado = calculadora.getNumActual().substring(0, i);
+			} else {
+				break;
+			}
+		}
+		calculadora.setNumActual(numeroArreglado);
+		refrescarTextoResultado();
+	}
+	
 	private void refrescarTextoResultado() {
 		
 		String numero = "";

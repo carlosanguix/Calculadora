@@ -99,7 +99,7 @@ public class Calculadora {
 	public void reset() {
 		this.numero1 = 0;
 		this.numero2 = 0;
-		this.operacion = this.numActual = this.numMemoria = "";
+		this.operacion = this.numActual = this.numMemoria = "0";
 	}
 
 	// Concatenar número al numActual
