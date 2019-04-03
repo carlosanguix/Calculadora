@@ -17,7 +17,8 @@ public class Calculadora {
 	public Calculadora() {
 		this.numero1 = 0;
 		this.numero2 = 0;
-		this.operacion = this.numActual = this.numMemoria = "";
+		this.operacion = this.numMemoria = ""; 
+		this.numActual = "0";
 	}
 
 
@@ -79,27 +80,37 @@ public class Calculadora {
 	}
 
 	public void porcentaje() {
-
+		
 	}
 
-	public double raiz() {
-		return 0;
+	public double raiz(double numero) {
+		
+		return Math.sqrt(numero);
+		
 	}
 
-	public double inversa() throws DivisionPorCeroException {
-		return 0;
+	public double inversa(double numero) throws DivisionPorCeroException {
+		
+		return 1 / numero;
+		
 	}
 
 	// Cambiar signo al valor actual
 	public void cambiarSigno() {
-
+		
+		if (this.numActual.charAt(0) == '-') {
+			this.numActual = this.numActual.substring(1, this.numActual.length());
+		} else {
+			this.numActual = '-' + this.numActual;
+		}
 	}
 
 	// Resetear todas las variables
 	public void reset() {
 		this.numero1 = 0;
 		this.numero2 = 0;
-		this.operacion = this.numActual = this.numMemoria = "0";
+		this.operacion = "";
+		this.numActual = "0";
 	}
 
 	// Concatenar número al numActual
@@ -134,11 +145,24 @@ public class Calculadora {
 
 	public void sumarMemoria() {
 
+		double numero1 = Double.parseDouble(this.numMemoria);
+		double numero2 = Double.parseDouble(this.numActual);
+		
+		numero1 = numero1 + numero2;
+		
+		this.numMemoria = Double.toString(numero1);
+		
 	}
 
 	public void restarMemoria() {
-
-
+		
+		double numero1 = Double.parseDouble(this.numMemoria);
+		double numero2 = Double.parseDouble(this.numActual);
+		
+		numero1 = numero1 - numero2;
+		
+		this.numMemoria = Double.toString(numero1);
+		
 	}
 
 	// Calcular cualquier operación

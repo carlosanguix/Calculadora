@@ -11,6 +11,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane.TitlePaneLayout;
 
 import dominio.Calculadora;
 import excepciones.DivisionPorCeroException;
+import excepciones.RaizNumeroNegativoException;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -171,8 +172,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		JButton button_MemoryClear = new JButton("MC");
 		button_MemoryClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculadora.setNumMemoria("");
-
+				calculadora.setNumMemoria("0");
 			}
 		});
 		GridBagConstraints gbc_button_MemoryClear = new GridBagConstraints();
@@ -185,7 +185,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		JButton button_MemoryRecall = new JButton("MR");
 		button_MemoryRecall.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textResultado.setText(calculadora.getNumMemoria());
+				memoryRecall();
 			}
 		});
 		GridBagConstraints gbc_button_MemoryRecall = new GridBagConstraints();
@@ -198,7 +198,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		JButton button_MemoryStorage = new JButton("MS");
 		button_MemoryStorage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculadora.setNumMemoria(textResultado.getText());
+				memorySave();
 			}
 		});
 		GridBagConstraints gbc_button_MemoryStorage = new GridBagConstraints();
@@ -211,7 +211,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		JButton button_MemorySumar = new JButton("M+");
 		button_MemorySumar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				double resultMemoria = Double.parseDouble(calculadora.getNumMemoria());
+				memorySumar();
 			}
 		});
 		GridBagConstraints gbc_button_MemorySumar = new GridBagConstraints();
@@ -221,7 +221,13 @@ public class MenuPpal extends JFrame implements KeyListener {
 		gbc_button_MemorySumar.gridy = 0;
 		panel_Centro_Centro.add(button_MemorySumar, gbc_button_MemorySumar);
 		// RESTAR A MEMORIA
+		//TODO
 		JButton button_MemoryRestar = new JButton("M-");
+		button_MemoryRestar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				memoryRestar();
+			}
+		});
 		GridBagConstraints gbc_button_MemoryRestar = new GridBagConstraints();
 		gbc_button_MemoryRestar.fill = GridBagConstraints.BOTH;
 		gbc_button_MemoryRestar.insets = new Insets(0, 0, 5, 5);
@@ -268,6 +274,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_ClearError, gbc_button_ClearError);
 		// CAMBIAR SIGNO
 		JButton button_CambiarSigno = new JButton("+/-");
+		button_CambiarSigno.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cambiarSigno();
+			}
+		});
 		GridBagConstraints gbc_button_CambiarSigno = new GridBagConstraints();
 		gbc_button_CambiarSigno.fill = GridBagConstraints.BOTH;
 		gbc_button_CambiarSigno.insets = new Insets(0, 0, 5, 5);
@@ -421,7 +432,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		gbc_button_Coma.gridx = 2;
 		gbc_button_Coma.gridy = 5;
 		panel_Centro_Centro.add(button_Coma, gbc_button_Coma);
-		
+
 		/////////////////
 		// OPERACIONES //
 		/////////////////
@@ -432,7 +443,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 				try {
 					asignarOperacion("+");
 				} catch (DivisionPorCeroException e1) {
-					e1.printStackTrace();
+					textResultado.setText(e1.mensaje());
 				}
 			}
 		});
@@ -449,7 +460,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 				try {
 					asignarOperacion("/");
 				} catch (DivisionPorCeroException e1) {
-					e1.printStackTrace();
+					textResultado.setText(e1.mensaje());
 				}
 			}
 		});
@@ -466,7 +477,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 				try {
 					asignarOperacion("-");
 				} catch (DivisionPorCeroException e1) {
-					e1.printStackTrace();
+					textResultado.setText(e1.mensaje());
 				}
 			}
 		});
@@ -483,7 +494,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 				try {
 					asignarOperacion("*");
 				} catch (DivisionPorCeroException e1) {
-					e1.printStackTrace();
+					textResultado.setText(e1.mensaje());
 				}
 			}
 		});
@@ -495,6 +506,15 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Multiplicar, gbc_button_Multiplicar);
 		// RAIZ CUADRADA
 		JButton button_RaizCuadrada = new JButton("√");
+		button_RaizCuadrada.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					raiz();
+				} catch (RaizNumeroNegativoException e1) {
+					textResultado.setText(e1.mensaje());
+				}
+			}
+		});
 		GridBagConstraints gbc_button_RaizCuadrada = new GridBagConstraints();
 		gbc_button_RaizCuadrada.fill = GridBagConstraints.BOTH;
 		gbc_button_RaizCuadrada.insets = new Insets(0, 0, 5, 5);
@@ -511,6 +531,15 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Porcentaje, gbc_button_Porcentaje);
 		// DIVIDIR POR X
 		JButton button_DividirPorX = new JButton("1/x");
+		button_DividirPorX.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					inversa();
+				} catch (DivisionPorCeroException e1) {
+					textResultado.setText(e1.mensaje());
+				}
+			}
+		});
 		GridBagConstraints gbc_button_DividirPorX = new GridBagConstraints();
 		gbc_button_DividirPorX.fill = GridBagConstraints.BOTH;
 		gbc_button_DividirPorX.insets = new Insets(0, 0, 5, 5);
@@ -524,7 +553,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 				try {
 					asignarOperacion("=");
 				} catch (DivisionPorCeroException e1) {
-					e1.printStackTrace();
+					textResultado.setText(e1.mensaje());
 				}
 			}
 		});
@@ -558,46 +587,51 @@ public class MenuPpal extends JFrame implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 
 		int key = e.getKeyCode();
+		try {
+			switch (key) {
 
-		switch (key) {
+			case KeyEvent.VK_0:	insertarNumero("0"); break;
+			case KeyEvent.VK_1:	insertarNumero("1"); break;
+			case KeyEvent.VK_2:	insertarNumero("2"); break;
+			case KeyEvent.VK_3:	insertarNumero("3"); break;
+			case KeyEvent.VK_4:	insertarNumero("4"); break;
+			case KeyEvent.VK_5:	insertarNumero("5"); break;
+			case KeyEvent.VK_6:	insertarNumero("6"); break;
+			case KeyEvent.VK_7:	insertarNumero("7"); break;
+			case KeyEvent.VK_8:	insertarNumero("8"); break;
+			case KeyEvent.VK_9:	insertarNumero("9"); break;
 
-		case KeyEvent.VK_0:	insertarNumero("0"); break;
-		case KeyEvent.VK_1:	insertarNumero("1"); break;
-		case KeyEvent.VK_2:	insertarNumero("2"); break;
-		case KeyEvent.VK_3:	insertarNumero("3"); break;
-		case KeyEvent.VK_4:	insertarNumero("4"); break;
-		case KeyEvent.VK_5:	insertarNumero("5"); break;
-		case KeyEvent.VK_6:	insertarNumero("6"); break;
-		case KeyEvent.VK_7:	insertarNumero("7"); break;
-		case KeyEvent.VK_8:	insertarNumero("8"); break;
-		case KeyEvent.VK_9:	insertarNumero("9"); break;
+			case KeyEvent.VK_NUMPAD0: insertarNumero("0"); break;
+			case KeyEvent.VK_NUMPAD1: insertarNumero("1"); break;
+			case KeyEvent.VK_NUMPAD2: insertarNumero("2"); break;
+			case KeyEvent.VK_NUMPAD3: insertarNumero("3"); break;
+			case KeyEvent.VK_NUMPAD4: insertarNumero("4"); break;
+			case KeyEvent.VK_NUMPAD5: insertarNumero("5"); break;
+			case KeyEvent.VK_NUMPAD6: insertarNumero("6"); break;
+			case KeyEvent.VK_NUMPAD7: insertarNumero("7"); break;
+			case KeyEvent.VK_NUMPAD8: insertarNumero("8"); break;
+			case KeyEvent.VK_NUMPAD9: insertarNumero("9"); break;
 
-		case KeyEvent.VK_NUMPAD0: insertarNumero("0"); break;
-		case KeyEvent.VK_NUMPAD1: insertarNumero("1"); break;
-		case KeyEvent.VK_NUMPAD2: insertarNumero("2"); break;
-		case KeyEvent.VK_NUMPAD3: insertarNumero("3"); break;
-		case KeyEvent.VK_NUMPAD4: insertarNumero("4"); break;
-		case KeyEvent.VK_NUMPAD5: insertarNumero("5"); break;
-		case KeyEvent.VK_NUMPAD6: insertarNumero("6"); break;
-		case KeyEvent.VK_NUMPAD7: insertarNumero("7"); break;
-		case KeyEvent.VK_NUMPAD8: insertarNumero("8"); break;
-		case KeyEvent.VK_NUMPAD9: insertarNumero("9"); break;
+			case KeyEvent.VK_BACK_SPACE: retroceder(); break;
+			case KeyEvent.VK_ESCAPE: clear(); break;
 
-		case KeyEvent.VK_BACK_SPACE: retroceder(); break;
-		case KeyEvent.VK_ESCAPE: clear(); break;
+			case KeyEvent.VK_DECIMAL: insertarNumero("."); break;
+			case KeyEvent.VK_COMMA: insertarNumero("."); break;
+			case KeyEvent.VK_PERIOD: insertarNumero("."); break;
 
-		case KeyEvent.VK_DECIMAL: insertarNumero("."); break;
-		case KeyEvent.VK_COMMA: insertarNumero("."); break;
-		case KeyEvent.VK_PERIOD: insertarNumero("."); break;
+			case KeyEvent.VK_ADD: asignarOperacion("+"); break;
+			case KeyEvent.VK_MINUS: asignarOperacion("-"); break;
+			case KeyEvent.VK_MULTIPLY: asignarOperacion("*"); break;
+			case KeyEvent.VK_DIVIDE: asignarOperacion("/"); break;
 
-		//		case KeyEvent.VK_ADD: asignarOperacion("+"); break;
-		//		case KeyEvent.VK_MINUS: asignarOperacion("-"); break;
-		//		case KeyEvent.VK_MULTIPLY: asignarOperacion("*"); break;
-		//		case KeyEvent.VK_DIVIDE: asignarOperacion("/"); break;
+			default:
+				break;
 
-		default:
-			break;
+			}
+		} catch (DivisionPorCeroException e1) {
+			textResultado.setText(e1.mensaje());
 		}
+
 
 	}
 
@@ -616,32 +650,72 @@ public class MenuPpal extends JFrame implements KeyListener {
 		calculadora.concatenar(numero);
 		refrescarTextoResultado();
 		textResultado.requestFocus();
+
+	}
+
+	private void memorySumar() {
+
+		calculadora.sumarMemoria();
+		
+	}
+
+	private void memoryRestar() {
+
+		calculadora.restarMemoria();
+
+	}
+
+	private void memoryRecall() {
+
+		calculadora.setNumActual(calculadora.getNumMemoria());
+		if (calculadora.getNumActual().contains(".")) {
+			arreglarNumero();
+		}
+		refrescarTextoResultado();
+		textResultado.requestFocus();
+	}
+
+	private void memorySave() {
+
+		calculadora.setNumMemoria(calculadora.getNumActual());
+		calculadora.setNumActual("0");
+		refrescarTextoResultado();
+		textResultado.requestFocus();
 	}
 
 	private void asignarOperacion(String operacion) throws DivisionPorCeroException {
 
 		String numero = calculadora.getNumActual();
 
-		if (operacion.equals("=")) {
-			
-		} else {
-			
-		}
-		
-		if (calculadora.getNumero1() == 0) {
-			calculadora.setNumero1(Double.parseDouble(numero));
-		} else {
-			calculadora.setNumero2(Double.parseDouble(numero));
-		}
+		if (!calculadora.getNumActual().equals("0")) {
 
-		if (!calculadora.getOperacion().isEmpty()) {
-			calcular();
-		}
+			if (calculadora.getNumero1() == 0) {
+				calculadora.setNumero1(Double.parseDouble(numero));
+			} else {
+				calculadora.setNumero2(Double.parseDouble(numero));
+			}
 
-		
-		calculadora.setNumActual("0");
-		calculadora.setOperacion(operacion);
+			if (!(calculadora.getOperacion().isEmpty())) {
+				calcular();
+				if (!operacion.equals("=")) {
+					calculadora.setOperacion(operacion);
+				} else {
+					calculadora.setNumero1(0);
+				}
+				calculadora.setNumActual("0");
+			} else {
+				calculadora.setOperacion(operacion);
+				calculadora.setNumActual("0");
+			}
+
+		} else {
+
+			if (calculadora.getNumero1() != 0) {
+				calculadora.setOperacion(operacion);
+			}
+		}
 		textResultado.requestFocus();
+
 	}
 
 	private void calcular() throws DivisionPorCeroException {
@@ -653,19 +727,98 @@ public class MenuPpal extends JFrame implements KeyListener {
 		}
 		calculadora.setNumero1(resultado);
 		calculadora.setNumero2(0);
+
+		calculadora.setOperacion("");
+
 		refrescarTextoResultado();
 		textResultado.requestFocus();
-	}
-
-	private void raiz() {
 
 	}
 
-	private void inversa() {
+	private void raiz() throws RaizNumeroNegativoException {
+
+		double numero;
+		double resultado = 0;
+
+		if (calculadora.getNumActual() != "0") {
+			numero = Double.parseDouble(calculadora.getNumActual());
+			resultado = calculadora.raiz(numero);
+
+		} else {
+			if (calculadora.getNumero2() != 0) {
+				numero = calculadora.getNumero2();
+				resultado = calculadora.raiz(numero);
+
+			} else if (calculadora.getNumero1() != 0) {
+				numero = calculadora.getNumero1();
+				resultado = calculadora.raiz(numero);
+			}
+		}
+
+		// TODO
+		calculadora.setNumero1(resultado);
+
+		calculadora.setNumActual(Double.toString(resultado));
+		if (calculadora.getNumActual().contains(".")) {
+			arreglarNumero();
+		}
+
+		refrescarTextoResultado();
+		textResultado.requestFocus();
+
+	}
+
+	private void inversa() throws DivisionPorCeroException {
+
+		double numero;
+		double resultado = 0;
+
+		try {
+
+			if (calculadora.getNumActual() != "0") {
+				numero = Double.parseDouble(calculadora.getNumActual());
+				resultado = calculadora.inversa(numero);
+
+			} else {
+				if (calculadora.getNumero2() != 0) {
+					numero = calculadora.getNumero2();
+					resultado = calculadora.inversa(numero);
+
+				} else if (calculadora.getNumero1() != 0) {
+					numero = calculadora.getNumero1();
+					resultado = calculadora.inversa(numero);
+				}
+			}
+
+			// TODO
+			calculadora.setNumero1(resultado);
+
+			calculadora.setNumActual(Double.toString(resultado));
+			if (calculadora.getNumActual().contains(".")) {
+				arreglarNumero();
+			}
+
+		} catch (DivisionPorCeroException e) {
+
+			textResultado.setText(e.mensaje());
+		}
+
+		refrescarTextoResultado();
+		calculadora.setNumActual("0");
+		textResultado.requestFocus();
 
 	}
 
 	private void cambiarSigno() {
+
+		//TODO (numActual == -)
+		if (!calculadora.getNumActual().equals("0")) {
+			calculadora.cambiarSigno();
+		}
+		if (calculadora.getNumActual().contains(".")) {
+			arreglarNumero();
+		}
+		refrescarTextoResultado();
 
 	}
 
@@ -694,14 +847,25 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void arreglarNumero() {
 
+		// TODO
+		boolean salirBucle = false;
 		String numeroArreglado = calculadora.getNumActual();
+
 		for (int i = calculadora.getNumActual().length() - 1; i > 0; i--) {
 			// 1.0 -> 1. -> 1
-			if (calculadora.getNumActual().charAt(i) == '0' || calculadora.getNumActual().charAt(i) == '.') {
-				numeroArreglado = calculadora.getNumActual().substring(0, i);
-			} else {
+			if (salirBucle) {
 				break;
+			} else {
+				if (calculadora.getNumActual().charAt(i) == '.') {
+					salirBucle = true;
+				}
+				if (calculadora.getNumActual().charAt(i) == '0' || calculadora.getNumActual().charAt(i) == '.') {
+					numeroArreglado = calculadora.getNumActual().substring(0, i);
+				} else {
+					break;
+				}
 			}
+
 		}
 		calculadora.setNumActual(numeroArreglado);
 		refrescarTextoResultado();
