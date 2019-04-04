@@ -221,7 +221,6 @@ public class MenuPpal extends JFrame implements KeyListener {
 		gbc_button_MemorySumar.gridy = 0;
 		panel_Centro_Centro.add(button_MemorySumar, gbc_button_MemorySumar);
 		// RESTAR A MEMORIA
-		//TODO
 		JButton button_MemoryRestar = new JButton("M-");
 		button_MemoryRestar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -523,6 +522,15 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_RaizCuadrada, gbc_button_RaizCuadrada);
 		// PORCENTAJE
 		JButton button_Porcentaje = new JButton("%");
+		button_Porcentaje.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					asignarOperacion("%");
+				} catch (DivisionPorCeroException e1) {
+					textResultado.setText(e1.mensaje());
+				}
+			}
+		});
 		GridBagConstraints gbc_button_Porcentaje = new GridBagConstraints();
 		gbc_button_Porcentaje.fill = GridBagConstraints.BOTH;
 		gbc_button_Porcentaje.insets = new Insets(0, 0, 5, 5);
@@ -648,6 +656,9 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void insertarNumero(String numero) {
 
+//		if (!calculadora.getOperacion().isEmpty()) {
+//			calculadora.setNumActual("0");
+//		}
 		calculadora.concatenar(numero);
 		refrescarTextoResultado();
 		textResultado.requestFocus();
@@ -678,6 +689,19 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void memorySave() {
 
+		if (calculadora.getNumActual() == "0") {
+			
+			if (calculadora.getNumero2() != 0) {
+				calculadora.setNumMemoria(Double.toString(calculadora.getNumero2()));
+				
+			} else if (calculadora.getNumero1() != 0) {
+				calculadora.setNumMemoria(Double.toString(calculadora.getNumero1()));
+			}
+			
+		} else {
+			calculadora.setNumMemoria(calculadora.getNumActual());
+		}
+		
 		calculadora.setNumMemoria(calculadora.getNumActual());
 		calculadora.setNumActual("0");
 		refrescarTextoResultado();
@@ -688,35 +712,50 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 		String numero = calculadora.getNumActual();
 
-		if (!calculadora.getNumActual().equals("0")) {
-
-			if (calculadora.getNumero1() == 0) {
-				calculadora.setNumero1(Double.parseDouble(numero));
-			} else {
-				calculadora.setNumero2(Double.parseDouble(numero));
-			}
-
-			if (!(calculadora.getOperacion().isEmpty())) {
-				calcular();
-				if (!operacion.equals("=")) {
-					calculadora.setOperacion(operacion);
-				} else {
-//					calculadora.setNumero1(0);
-				}
-				calculadora.setNumActual("0");
-			} else {
-				calculadora.setOperacion(operacion);
-				calculadora.setNumActual("0");
-			}
-
+		if (operacion.equals("%") && (calculadora.getOperacion().equals("+") ||
+									calculadora.getOperacion().equals("-") ||
+									calculadora.getOperacion().equals("*") ||
+									calculadora.getOperacion().equals("/"))) {
+			
+			calculadora.setOperacion(calculadora.getOperacion() + "%");
+			calcular();
+			// TODO No lo puedo guardar en memoria
+			calculadora.setNumActual("0");
+			
 		} else {
+			
+			if (!calculadora.getNumActual().equals("0") || calculadora.getOperacion() == "/") {
 
-			if (calculadora.getNumero1() != 0) {
-				calculadora.setOperacion(operacion);
+				if (calculadora.getNumero1() == 0) {
+					calculadora.setNumero1(Double.parseDouble(numero));
+				} else {
+					calculadora.setNumero2(Double.parseDouble(numero));
+				}
+
+				if (!(calculadora.getOperacion().isEmpty())) {
+					calcular();
+					if (!operacion.equals("=")) {
+						calculadora.setOperacion(operacion);
+						calculadora.setNumActual("0");
+					} else {
+//						calculadora.setNumero1(0);
+						calculadora.setNumActual("0");
+					}
+//					calculadora.setNumActual("0");
+				} else {
+					calculadora.setOperacion(operacion);
+					calculadora.setNumActual("0");
+				}
+
+			} else {
+
+				if (calculadora.getNumero1() != 0) {
+					calculadora.setOperacion(operacion);
+				}
 			}
 		}
+		
 		textResultado.requestFocus();
-
 	}
 
 	private void calcular() throws DivisionPorCeroException {
@@ -756,7 +795,6 @@ public class MenuPpal extends JFrame implements KeyListener {
 			}
 		}
 
-		// TODO
 		calculadora.setNumero1(resultado);
 
 		calculadora.setNumActual(Double.toString(resultado));
@@ -791,7 +829,6 @@ public class MenuPpal extends JFrame implements KeyListener {
 				}
 			}
 
-			// TODO
 			calculadora.setNumero1(resultado);
 
 			calculadora.setNumActual(Double.toString(resultado));
@@ -812,7 +849,6 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void cambiarSigno() {
 
-		//TODO (numActual == -)
 		if (!calculadora.getNumActual().equals("0")) {
 			calculadora.cambiarSigno();
 		}
@@ -851,7 +887,6 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void arreglarNumero() {
 
-		// TODO
 		boolean salirBucle = false;
 		String numeroArreglado = calculadora.getNumActual();
 

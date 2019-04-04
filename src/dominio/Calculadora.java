@@ -1,6 +1,7 @@
 package dominio;
 
 import excepciones.DivisionPorCeroException;
+import excepciones.RaizNumeroNegativoException;
 
 public class Calculadora {
 
@@ -58,46 +59,98 @@ public class Calculadora {
 	// METODOS
 	// Operaciones aritméticas
 	public double sumar() {
-		return this.numero1 + this.numero2;
+
+		double resultado;
+
+		if (this.operacion.contains("%")) {
+
+			resultado = this.numero1 + (this.numero1 * (this.numero1 / 100));
+
+		} else {
+
+			resultado = this.numero1 + this.numero2;
+		}
+
+		return resultado;
 	}
 
 	public double restar() {
-		return this.numero1 - this.numero2;
+
+		double resultado;
+
+		if (this.operacion.contains("%")) {
+
+			resultado = this.numero1 - (this.numero1 * (this.numero1 / 100));
+
+		} else {
+
+			resultado = this.numero1 - this.numero2;
+		}
+
+		return resultado;
 	}
 
 	public double multiplicar() {
-		return this.numero1 * this.numero2;
+
+		double resultado;
+
+		if (this.operacion.contains("%")) {
+
+			resultado = this.numero1 * (this.numero1 * (this.numero1 / 100));
+
+		} else {
+
+			resultado = this.numero1 * this.numero2;
+		}
+
+		return resultado;
 	}
 
 	public double dividir() throws DivisionPorCeroException {
+
 		double resultado = 0;
+
 		if (this.getNumero2() == 0) {
+			reset();
 			throw new DivisionPorCeroException();
-		} else {
-			resultado =  this.numero1 / this.numero2;
 		}
+
+		if (this.operacion.contains("%")) {
+
+			resultado = this.numero1 / (this.numero1 * (this.numero1 / 100));
+
+		} else {
+
+			resultado = this.numero1 / this.numero2;
+		}
+
 		return resultado;
 	}
 
 	public void porcentaje() {
-		
+
+
+
 	}
 
-	public double raiz(double numero) {
-		
+	public double raiz(double numero) throws RaizNumeroNegativoException {
+
+		if (numero < 0) {
+			reset();
+			throw new RaizNumeroNegativoException();
+		}
 		return Math.sqrt(numero);
-		
+
 	}
 
 	public double inversa(double numero) throws DivisionPorCeroException {
-		
+
 		return 1 / numero;
-		
+
 	}
 
-	// Cambiar signo al valor actual
 	public void cambiarSigno() {
-		
+
 		if (this.numActual.charAt(0) == '-') {
 			this.numActual = this.numActual.substring(1, this.numActual.length());
 		} else {
@@ -105,7 +158,6 @@ public class Calculadora {
 		}
 	}
 
-	// Resetear todas las variables
 	public void reset() {
 		this.numero1 = 0;
 		this.numero2 = 0;
@@ -113,7 +165,6 @@ public class Calculadora {
 		this.numActual = "0";
 	}
 
-	// Concatenar número al numActual
 	public String concatenar(String numero) {
 
 		if (this.numActual.equals("") || this.numActual.equals("0")) {
@@ -133,7 +184,6 @@ public class Calculadora {
 
 	}
 
-	// ¿BackSpace?
 	public void retroceder() {
 		if (this.numActual.length() > 0) {
 			this.numActual = this.numActual.substring(0, this.numActual.length() - 1);
@@ -147,25 +197,24 @@ public class Calculadora {
 
 		double numero1 = Double.parseDouble(this.numMemoria);
 		double numero2 = Double.parseDouble(this.numActual);
-		
+
 		numero1 = numero1 + numero2;
-		
+
 		this.numMemoria = Double.toString(numero1);
-		
+
 	}
 
 	public void restarMemoria() {
-		
+
 		double numero1 = Double.parseDouble(this.numMemoria);
 		double numero2 = Double.parseDouble(this.numActual);
-		
+
 		numero1 = numero1 - numero2;
-		
+
 		this.numMemoria = Double.toString(numero1);
-		
+
 	}
 
-	// Calcular cualquier operación
 	public double calcular() throws DivisionPorCeroException {
 
 		double res = 0;
@@ -173,14 +222,13 @@ public class Calculadora {
 		case "+": res = sumar(); break;
 		case "-": res = restar(); break;
 		case "*": res = multiplicar(); break;
-		case "/":
-				res = dividir();
-			break;
+		case "/": res = dividir(); break;
 		case "+%": porcentaje(); res = sumar(); break;
 		case "-%": porcentaje(); res = restar(); break;
-		case "*%": porcentaje(); res = numero2; break;
+		case "*%": porcentaje(); res = multiplicar(); break;
 		case "/%": porcentaje(); res = dividir(); break;
 		}
+
 		this.numActual = Double.toString(res);
 		return res;
 
