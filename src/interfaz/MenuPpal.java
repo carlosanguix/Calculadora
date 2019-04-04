@@ -623,6 +623,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 			case KeyEvent.VK_MINUS: asignarOperacion("-"); break;
 			case KeyEvent.VK_MULTIPLY: asignarOperacion("*"); break;
 			case KeyEvent.VK_DIVIDE: asignarOperacion("/"); break;
+			case KeyEvent.VK_ENTER: asignarOperacion("="); break;
 
 			default:
 				break;
@@ -700,7 +701,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 				if (!operacion.equals("=")) {
 					calculadora.setOperacion(operacion);
 				} else {
-					calculadora.setNumero1(0);
+//					calculadora.setNumero1(0);
 				}
 				calculadora.setNumActual("0");
 			} else {
@@ -804,7 +805,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		}
 
 		refrescarTextoResultado();
-		calculadora.setNumActual("0");
+//		calculadora.setNumActual("0");
 		textResultado.requestFocus();
 
 	}
@@ -836,6 +837,9 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void clearError() {
 
+		calculadora.reset();
+		refrescarTextoResultado();
+		textResultado.requestFocus();
 	}
 
 	private void clear() {
