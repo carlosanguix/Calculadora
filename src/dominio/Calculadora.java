@@ -129,7 +129,7 @@ public class Calculadora {
 
 	public void porcentaje() {
 
-
+		//TODO Tratar las operaciones con porcentajes aquí, o no...
 
 	}
 
@@ -185,8 +185,13 @@ public class Calculadora {
 	}
 
 	public void retroceder() {
+		// TODO Optimizar
 		if (this.numActual.length() > 0) {
-			this.numActual = this.numActual.substring(0, this.numActual.length() - 1);
+			if (this.numActual.length() == 2 && this.numActual.charAt(0) == '-') {
+				this.numActual = "0";
+			} else {
+				this.numActual = this.numActual.substring(0, this.numActual.length() - 1);
+			}
 		}
 		if (this.numActual.equals("")) {
 			this.numActual = "0";
@@ -223,6 +228,7 @@ public class Calculadora {
 		case "-": res = restar(); break;
 		case "*": res = multiplicar(); break;
 		case "/": res = dividir(); break;
+		// TODO porque? porcentaje
 		case "+%": porcentaje(); res = sumar(); break;
 		case "-%": porcentaje(); res = restar(); break;
 		case "*%": porcentaje(); res = multiplicar(); break;

@@ -70,7 +70,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 		});
 	}
 
-	// Para que no tenga aspecto ochentero Uiumanager.SetLookAndFeel
+	// TODO Para que no tenga aspecto ochentero Uiumanager.SetLookAndFeel
 	// Crear clase propia para los botones que herede de JButton
 	// modificar a nuestro antojo bordes, color por defecto etc y crear los botones
 	// con esa clase propia
@@ -140,10 +140,9 @@ public class MenuPpal extends JFrame implements KeyListener {
 		textResultado.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		textResultado.setFont(new Font("Arial", Font.PLAIN, 15));
 		textResultado.setHorizontalAlignment(JTextField.RIGHT);
-		// ??
+		// TODO ??
 		textResultado.addKeyListener(this);
 		textResultado.requestFocus();
-		//
 		textResultado.setText("0");
 		GroupLayout gl_panel_Top = new GroupLayout(panel_Top);
 		gl_panel_Top.setHorizontalGroup(gl_panel_Top.createParallelGroup(Alignment.LEADING)
@@ -265,6 +264,11 @@ public class MenuPpal extends JFrame implements KeyListener {
 		panel_Centro_Centro.add(button_Clear, gbc_button_Clear);
 		// CLEAR ERROR
 		JButton button_ClearError = new JButton("CE");
+		button_ClearError.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearError();
+			}
+		});
 		GridBagConstraints gbc_button_ClearError = new GridBagConstraints();
 		gbc_button_ClearError.fill = GridBagConstraints.BOTH;
 		gbc_button_ClearError.insets = new Insets(0, 0, 5, 5);
@@ -719,7 +723,8 @@ public class MenuPpal extends JFrame implements KeyListener {
 			
 			calculadora.setOperacion(calculadora.getOperacion() + "%");
 			calcular();
-			// TODO No lo puedo guardar en memoria
+			// TODO No lo puedo guardar en memoria, si quito esta instrucción, podré guardar en memoria, pero también
+			// podré insertarle numeros al realizar esta operación %
 			calculadora.setNumActual("0");
 			
 		} else {
@@ -842,7 +847,9 @@ public class MenuPpal extends JFrame implements KeyListener {
 		}
 
 		refrescarTextoResultado();
-//		calculadora.setNumActual("0");
+		// TODO No lo puedo guardar en memoria, si quito esta instrucción, podré guardar en memoria, pero también
+		// podré insertarle numeros al realizar esta operación %
+		calculadora.setNumActual("0");
 		textResultado.requestFocus();
 
 	}
@@ -887,6 +894,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void arreglarNumero() {
 
+		// TODO Es necesario?? Juntar método con refrescarTextoResultado
 		boolean salirBucle = false;
 		String numeroArreglado = calculadora.getNumActual();
 
