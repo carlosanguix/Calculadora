@@ -146,7 +146,6 @@ public class Calculadora {
 	public double inversa(double numero) throws DivisionPorCeroException {
 
 		return 1 / numero;
-
 	}
 
 	public void cambiarSigno() {

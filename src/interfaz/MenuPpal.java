@@ -725,6 +725,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 			calcular();
 			// TODO No lo puedo guardar en memoria, si quito esta instrucción, podré guardar en memoria, pero también
 			// podré insertarle numeros al realizar esta operación %
+			// TODO No hace 5 + 3√ solo hace 3√
 			calculadora.setNumActual("0");
 			
 		} else {
@@ -896,6 +897,7 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 		// TODO Es necesario?? Juntar método con refrescarTextoResultado
 		boolean salirBucle = false;
+		
 		String numeroArreglado = calculadora.getNumActual();
 
 		for (int i = calculadora.getNumActual().length() - 1; i > 0; i--) {
@@ -935,4 +937,5 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 		textResultado.setText(numero);
 	}
+	
 }
