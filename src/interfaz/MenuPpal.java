@@ -920,13 +920,17 @@ public class MenuPpal extends JFrame implements KeyListener {
 
 	private void refrescarTextoResultado() {
 
+		// TODO millares
 		String numero = "";
+		
 		for (int i = 0; i < calculadora.getNumActual().length(); i++) {
 			if (calculadora.getNumActual().charAt(i) == '.') {
 				numero = numero + ",";
 			} else {
 				numero = numero + calculadora.getNumActual().charAt(i);
 			}
+			
+			
 		}
 
 		textResultado.setText(numero);
